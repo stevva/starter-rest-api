@@ -68,7 +68,7 @@ app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
   const scoreBoardFromDB = await db.collection(scores).list()
   console.log('scoreBoardFromDB:', scoreBoardFromDB)
-  const scoreBoardFromUser = JSON.parse(req.body)
+  const scoreBoardFromUser = req.body
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
 
 
