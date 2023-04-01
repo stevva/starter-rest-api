@@ -31,7 +31,9 @@ app.use('/:scores', async (req, res) => {
     : []
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   const minScoreFromDb = parsedScoreBoardFromDB.reduce((acc, scoreEntry) => acc < scoreEntry.score ? acc : scoreEntry.score, Infinity)
+  console.log('minScoreFromDb:', minScoreFromDb)
   const maxScoreFromUser = scoreBoardFromUser.reduce((acc, scoreEntry) => acc > scoreEntry.score ? acc : scoreEntry.score, 0)
+  console.log('maxScoreFromUser:', maxScoreFromUser)
   let newScoreBoard
   if (minScoreFromDb < maxScoreFromUser) {
     newScoreBoard = parsedScoreBoardFromDB
