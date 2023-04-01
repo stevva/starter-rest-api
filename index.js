@@ -66,29 +66,29 @@ app.get('/:col', async (req, res) => {
 // Catch all handler for all other request.
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
-  const { results: scoreBoardFromEmptyDB } = await db.collection(scores).list()
-  console.log('scoreBoardFromEmptyDB:', scoreBoardFromEmptyDB)
+  // const { results: scoreBoardFromEmptyDB } = await db.collection(scores).list()
+  // console.log('scoreBoardFromEmptyDB:', scoreBoardFromEmptyDB)
   const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
   console.log('scoreBoardFromDB:', scoreBoardFromDB)
-  const parsedScoreBoardFromDB = JSON.stringify(scoreBoardFromDB, null, 2)
+  const parsedScoreBoardFromDB = scoreBoardFromDB
+    ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).scoreBoardItems
+    : []
   console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
-  const item = await db.collection(scores).delete('scoreBoard')
-  console.log('item:', item)
-  // const newScoreBoard = scoreBoardFromDB
-  //   .concat(scoreBoardFromUser)
-  //   .reduce((acc, scoreEntry) => {
-  //     const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
-  //     if (entryFound) {
-  //       return acc
-  //     }
-  //     return [...acc, scoreEntry]
-  //   }, [])
-  // console.log('newScoreBoardCalculated:', newScoreBoard)
-  // const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', newScoreBoard)
-  // console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
-  // res.json(JSON.stringify({ newScoreBoard }))
+  const newScoreBoard = scoreBoardFromDB
+    .concat(scoreBoardFromUser)
+    .reduce((acc, scoreEntry) => {
+      const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
+      if (entryFound) {
+        return acc
+      }
+      return [...acc, scoreEntry]
+    }, [])
+  console.log('newScoreBoardCalculated:', newScoreBoard)
+  const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
+  console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
+  res.json(JSON.stringify({ newScoreBoard }))
 })
 
 // Start the server
