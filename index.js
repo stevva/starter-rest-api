@@ -46,11 +46,12 @@ app.use('/:scores', async (req, res) => {
       .sort((a, b) => b.score - a.score)
       .slice(0, 15)
     db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
+    console.log('newScoreBoard writen:', newScoreBoard)
   } else {
     newScoreBoard = scoreBoardFromUser
+    console.log('newScoreBoard not writen:', newScoreBoard)
   }
   res.json(JSON.stringify({ newScoreBoard }))
-  console.log('newScoreBoard:', newScoreBoard)
 })
 
 // Start the server
