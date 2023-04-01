@@ -66,7 +66,8 @@ app.get('/:col', async (req, res) => {
 // Catch all handler for all other request.
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
-  const { results: scoreBoardFromDB } = await db.collection(scores).get('scoreBoard')
+  // const { results: scoreBoardFromDB } = await db.collection(scores).list()
+  const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
   console.log('scoreBoardFromDB:', scoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
