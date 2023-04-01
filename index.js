@@ -74,7 +74,8 @@ app.use('/:scores', async (req, res) => {
   console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
-  const item = await db.collection(col).delete('scoreBoard')
+  const item = await db.collection(scores).delete('scoreBoard')
+  console.log('item:', item)
   // const newScoreBoard = scoreBoardFromDB
   //   .concat(scoreBoardFromUser)
   //   .reduce((acc, scoreEntry) => {
