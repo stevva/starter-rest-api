@@ -70,10 +70,19 @@ app.use('/:scores', async (req, res) => {
   console.log('scoreBoardFromDB:', scoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
-
-  scoreBoardFromUser.forEach(aaa => console.log('aaa', aaa))
-
-  res.json(JSON.stringify({ response: req.body }))
+  const newScoreBoard = scoreBoardFromDB
+    .concat(scoreBoardFromUser)
+    .reduce((acc, scoreEntry) => {
+      const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
+      if (entryFound) {
+        return acc
+      }
+      return [...acc, scoreEntry]
+    }, [])
+  console.log('newScoreBoardCalculated:', newScoreBoard)
+  const newScoreBoardFromDB = await db.collection(col).set('scoreBoard', newScoreBoard)
+  console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
+  res.json(JSON.stringify({ newScoreBoard }))
 })
 
 // Start the server
