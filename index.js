@@ -67,8 +67,10 @@ app.get('/:col', async (req, res) => {
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
   // const { results: scoreBoardFromDB } = await db.collection(scores).list()
-  const {scoreBoardFromDB} = await db.collection(scores).get('scoreBoard')
-  console.log('scoreBoardFromDB:', scoreBoardFromDB.props)
+  const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
+  console.log('scoreBoardFromDB:', scoreBoardFromDB)
+  const parsedScoreBoardFromDB = JSON.stringify(scoreBoardFromDB, null, 2)
+  console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
   // const newScoreBoard = scoreBoardFromDB
