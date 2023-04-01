@@ -30,17 +30,26 @@ app.use('/:scores', async (req, res) => {
     ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
   const scoreBoardFromUser = req.body.scoreBoardFromUser
-  const newScoreBoard = parsedScoreBoardFromDB
-    .concat(scoreBoardFromUser)
-    .reduce((acc, scoreEntry) => {
-      const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
-      if (entryFound) {
-        return acc
-      }
-      return [...acc, scoreEntry]
-    }, [])
+  const minScoreFromDb = parsedScoreBoardFromDB.reduce((acc, scoreEntry) => acc < scoreEntry.score ? acc : scoreEntry.score, Infinity)
+  const maxScoreFromUser = scoreBoardFromUser.reduce((acc, scoreEntry) => acc > scoreEntry.score ? acc : scoreEntry.score, 0)
+  let newScoreBoard
+  if (minScoreFromDb < maxScoreFromUser) {
+    newScoreBoard = parsedScoreBoardFromDB
+      .concat(scoreBoardFromUser)
+      .reduce((acc, scoreEntry) => {
+        const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
+        if (entryFound) {
+          return acc
+        }
+        return [...acc, scoreEntry]
+      }, [])
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 15)
+    db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
+  } else {
+    newScoreBoard = scoreBoardFromUser
+  }
   res.json(JSON.stringify({ newScoreBoard }))
-  db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
 })
 
 // Start the server
