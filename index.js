@@ -50,6 +50,7 @@ app.use('/:scores', async (req, res) => {
     newScoreBoard = scoreBoardFromUser
   }
   res.json(JSON.stringify({ newScoreBoard }))
+  console.log('newScoreBoard:', newScoreBoard)
 })
 
 // Start the server
