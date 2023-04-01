@@ -16,7 +16,7 @@ app.use('/:scores', async (req, res) => {
     ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
   const scoreBoardFromUser = req.body.scoreBoardFromUser
-  const minScoreFromDb = c.reduce((acc, scoreEntry) => scoreEntry.score < acc ? scoreEntry.score : acc, Infinity)
+  const minScoreFromDb = parsedScoreBoardFromDB.reduce((acc, scoreEntry) => scoreEntry.score < acc ? scoreEntry.score : acc, Infinity)
   const validScoreEntriesFromUser = scoreBoardFromUser.filter(scoreEntryFromUser => {
     const isHighscore = scoreEntryFromUser.score > minScoreFromDb
     const isUnique = !parsedScoreBoardFromDB.some(scoreEntryFromDB => scoreEntryFromDB.date === scoreEntryFromUser.date
