@@ -67,8 +67,8 @@ app.get('/:col', async (req, res) => {
 app.use('/:scores', (req, res) => {
   // res.json({ msg: 'no route handler found' }).end()
   console.log('request:', req.body)
-  const col = req.params.col
-  console.log('request:', col)
+  const scores = req.params
+  console.log('scores:', scores)
 
 
 
