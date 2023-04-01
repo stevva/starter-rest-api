@@ -80,7 +80,7 @@ app.use('/:scores', async (req, res) => {
       return [...acc, scoreEntry]
     }, [])
   console.log('newScoreBoardCalculated:', newScoreBoard)
-  const newScoreBoardFromDB = await db.collection(col).set('scoreBoard', newScoreBoard)
+  const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', newScoreBoard)
   console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
   res.json(JSON.stringify({ newScoreBoard }))
 })
