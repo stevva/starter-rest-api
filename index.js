@@ -37,12 +37,12 @@ app.use('/:scores', async (req, res) => {
     newScoreBoard = parsedScoreBoardFromDB
       .concat(scoreBoardFromUser)
       .reduce((acc, scoreEntry) => {
-        const uniqueEntry = acc.every(({ date, name, score }) => scoreEntry.date !== date
-          && scoreEntry.name && scoreEntry.name !== name && scoreEntry.score !== score)
-        if (uniqueEntry) {
-          return [...acc, scoreEntry]
+        const badEntryFound = acc.find(({ date, name, score }) => (scoreEntry.date === date
+          && scoreEntry.name === name && scoreEntry.score === score) || !scoreEntry.name)
+        if (badEntryFound) {
+          return acc
         }
-        return acc
+        return [...acc, scoreEntry]
       }, [])
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
