@@ -71,7 +71,7 @@ app.use('/:scores', async (req, res) => {
   const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
   console.log('scoreBoardFromDB:', scoreBoardFromDB)
   const parsedScoreBoardFromDB = scoreBoardFromDB
-    ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).scoreBoardItems
+    ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
   console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
