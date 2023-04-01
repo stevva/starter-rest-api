@@ -66,16 +66,11 @@ app.get('/:col', async (req, res) => {
 // Catch all handler for all other request.
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
-  // const { results: scoreBoardFromEmptyDB } = await db.collection(scores).list()
-  // console.log('scoreBoardFromEmptyDB:', scoreBoardFromEmptyDB)
   const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
-  console.log('scoreBoardFromDB:', scoreBoardFromDB)
   const parsedScoreBoardFromDB = scoreBoardFromDB
     ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
-  console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
-  console.log('scoreBoardFromUser:', scoreBoardFromUser)
   const newScoreBoard = parsedScoreBoardFromDB
     .concat(scoreBoardFromUser)
     .reduce((acc, scoreEntry) => {
@@ -85,10 +80,9 @@ app.use('/:scores', async (req, res) => {
       }
       return [...acc, scoreEntry]
     }, [])
-  console.log('newScoreBoardCalculated:', newScoreBoard)
+  res.json(JSON.stringify({ newScoreBoard }))
   const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
   console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
-  res.json(JSON.stringify({ newScoreBoard }))
 })
 
 // Start the server
