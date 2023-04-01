@@ -67,23 +67,23 @@ app.get('/:col', async (req, res) => {
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
   // const { results: scoreBoardFromDB } = await db.collection(scores).list()
-  const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
-  console.log('scoreBoardFromDB:', scoreBoardFromDB)
+  const {scoreBoardFromDB} = await db.collection(scores).get('scoreBoard')
+  console.log('scoreBoardFromDB:', scoreBoardFromDB.props)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
-  const newScoreBoard = scoreBoardFromDB
-    .concat(scoreBoardFromUser)
-    .reduce((acc, scoreEntry) => {
-      const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
-      if (entryFound) {
-        return acc
-      }
-      return [...acc, scoreEntry]
-    }, [])
-  console.log('newScoreBoardCalculated:', newScoreBoard)
-  const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', newScoreBoard)
-  console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
-  res.json(JSON.stringify({ newScoreBoard }))
+  // const newScoreBoard = scoreBoardFromDB
+  //   .concat(scoreBoardFromUser)
+  //   .reduce((acc, scoreEntry) => {
+  //     const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
+  //     if (entryFound) {
+  //       return acc
+  //     }
+  //     return [...acc, scoreEntry]
+  //   }, [])
+  // console.log('newScoreBoardCalculated:', newScoreBoard)
+  // const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', newScoreBoard)
+  // console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
+  // res.json(JSON.stringify({ newScoreBoard }))
 })
 
 // Start the server
