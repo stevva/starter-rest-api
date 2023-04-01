@@ -64,9 +64,15 @@ app.get('/:col', async (req, res) => {
 })
 
 // Catch all handler for all other request.
-app.use('*', (req, res) => {
+app.use('/:scores', (req, res) => {
   // res.json({ msg: 'no route handler found' }).end()
   console.log('request:', req.body)
+  const col = req.params.col
+  console.log('request:', col)
+
+
+
+
   res.json(JSON.stringify({ response: req.body }))
 })
 
