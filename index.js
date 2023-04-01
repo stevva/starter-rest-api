@@ -66,13 +66,15 @@ app.get('/:col', async (req, res) => {
 // Catch all handler for all other request.
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
-  // const { results: scoreBoardFromDB } = await db.collection(scores).list()
+  const { results: scoreBoardFromEmptyDB } = await db.collection(scores).list()
+  console.log('scoreBoardFromEmptyDB:', scoreBoardFromEmptyDB)
   const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
   console.log('scoreBoardFromDB:', scoreBoardFromDB)
   const parsedScoreBoardFromDB = JSON.stringify(scoreBoardFromDB, null, 2)
   console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
+  const item = await db.collection(col).delete('scoreBoard')
   // const newScoreBoard = scoreBoardFromDB
   //   .concat(scoreBoardFromUser)
   //   .reduce((acc, scoreEntry) => {
