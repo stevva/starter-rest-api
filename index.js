@@ -22,48 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 // app.use(express.static('public', options))
 // #############################################################################
 
-// Create or Update an item
-app.post('/:col/:key', async (req, res) => {
-  console.log(req.body)
-
-  const col = req.params.col
-  const key = req.params.key
-  console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection(col).set(key, req.body)
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
-})
-
-// Delete an item
-app.delete('/:col/:key', async (req, res) => {
-  const col = req.params.col
-  const key = req.params.key
-  console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection(col).delete(key)
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
-})
-
-// Get a single item
-app.get('/:col/:key', async (req, res) => {
-  const col = req.params.col
-  const key = req.params.key
-  console.log(`from collection: ${col} get key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection(col).get(key)
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
-})
-
-// Get a full listing
-app.get('/:col', async (req, res) => {
-  const col = req.params.col
-  console.log(`list collection: ${col} with params: ${JSON.stringify(req.params)}`)
-  const items = await db.collection(col).list()
-  console.log(JSON.stringify(items, null, 2))
-  res.json(items).end()
-})
-
-// Catch all handler for all other request.
+// Get scores from user and DB, join data and write joined to DB and send to user
 app.use('/:scores', async (req, res) => {
   const scores = req.params.scores
   const scoreBoardFromDB = await db.collection(scores).get('scoreBoard')
@@ -81,8 +40,7 @@ app.use('/:scores', async (req, res) => {
       return [...acc, scoreEntry]
     }, [])
   res.json(JSON.stringify({ newScoreBoard }))
-  const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
-  console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
+  db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
 })
 
 // Start the server
