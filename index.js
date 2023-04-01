@@ -76,7 +76,7 @@ app.use('/:scores', async (req, res) => {
   console.log('parsedScoreBoardFromDB:', parsedScoreBoardFromDB)
   const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
-  const newScoreBoard = scoreBoardFromDB
+  const newScoreBoard = parsedScoreBoardFromDB
     .concat(scoreBoardFromUser)
     .reduce((acc, scoreEntry) => {
       const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
