@@ -30,20 +30,19 @@ app.use('/:scores', async (req, res) => {
     ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
   const scoreBoardFromUser = req.body.scoreBoardFromUser
-  const minScoreFromDb = parsedScoreBoardFromDB.reduce((acc, scoreEntry) => scoreEntry.score < acc ? scoreEntry.score : acc, Infinity)
-  const maxScoreFromUser = scoreBoardFromUser.reduce((acc, scoreEntry) => scoreEntry.score > acc ? scoreEntry.score : acc, 0)
+  const minScoreFromDb = c.reduce((acc, scoreEntry) => scoreEntry.score < acc ? scoreEntry.score : acc, Infinity)
+  const validScoreEntriesFromUser = scoreBoardFromUser.filter(scoreEntryFromUser => {
+    const isHighscore = scoreEntryFromUser.score > minScoreFromDb
+    const isUnique = !parsedScoreBoardFromDB.some(scoreEntryFromDB => scoreEntryFromDB.date === scoreEntryFromUser.date
+      && scoreEntryFromDB.name === scoreEntryFromUser.name && scoreEntryFromDB.score === scoreEntryFromUser.score
+    )
+    return isHighscore && isUnique
+  }
+  )
   let newScoreBoard
-  if (minScoreFromDb < maxScoreFromUser) {
+  if (validScoreEntriesFromUser.length) {
     newScoreBoard = parsedScoreBoardFromDB
-      .concat(scoreBoardFromUser)
-      .reduce((acc, scoreEntry) => {
-        const badEntryFound = acc.find(({ date, name, score }) => (scoreEntry.date === date
-          && scoreEntry.name === name && scoreEntry.score === score) || !scoreEntry.name)
-        if (badEntryFound) {
-          return acc
-        }
-        return [...acc, scoreEntry]
-      }, [])
+      .concat(validScoreEntriesFromUser)
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
     db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
