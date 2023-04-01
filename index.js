@@ -71,15 +71,14 @@ app.use('/:scores', async (req, res) => {
     ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
   const scoreBoardFromUser = req.body.scoreBoardFromUser
-  const newScoreBoard = parsedScoreBoardFromDB
-    .concat(scoreBoardFromUser)
-    .reduce((acc, scoreEntry) => {
-      const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
-      if (entryFound) {
-        return acc
-      }
-      return [...acc, scoreEntry]
-    }, [])
+  const newScoreBoard = new Set(parsedScoreBoardFromDB.concat(scoreBoardFromUser))
+    // .reduce((acc, scoreEntry) => {
+    //   const entryFound = acc.find(({ date, name, score }) => scoreEntry.date === date && scoreEntry.name === name && scoreEntry.score === score)
+    //   if (entryFound) {
+    //     return acc
+    //   }
+    //   return [...acc, scoreEntry]
+    // }, [])
   res.json(JSON.stringify({ newScoreBoard }))
   const newScoreBoardFromDB = await db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
   console.log('newScoreBoardFromDB:', newScoreBoardFromDB)
