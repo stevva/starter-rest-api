@@ -44,7 +44,7 @@ app.use('/:scores', async (req, res) => {
         return [...acc, scoreEntry]
       }, [])
       .sort((a, b) => b.score - a.score)
-      .slice(0, 15)
+      .slice(0, 10)
     db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
     console.log('newScoreBoard writen:', newScoreBoard)
   } else {
