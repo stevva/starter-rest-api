@@ -16,7 +16,7 @@ app.use('/:scores', async (req, res) => {
   const parsedScoreBoardFromDB = scoreBoardFromDB
     ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
     : []
-  const scoreBoardFromUser = req
+  const scoreBoardFromUser = req.body.scoreBoardFromUser
   console.log('scoreBoardFromUser:', scoreBoardFromUser)
   const minScoreFromDb = parsedScoreBoardFromDB.reduce((acc, scoreEntry) => scoreEntry.score < acc ? scoreEntry.score : acc, Infinity)
   const validScoreEntriesFromUser = scoreBoardFromUser.filter(scoreEntryFromUser => {
