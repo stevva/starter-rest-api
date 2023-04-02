@@ -33,9 +33,8 @@ app.use('/:scores', async (req, res) => {
       .slice(0, 10)
     db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
   } else {
-    newScoreBoard = parsedScoreBoardFromDB
+    newScoreBoard = parsedScoreBoardFromDB.length ? parsedScoreBoardFromDB : scoreBoardFromUser
   }
-  console.log('newScoreBoard:', newScoreBoard)
   res.json(JSON.stringify({ newScoreBoard }))
 })
 
@@ -44,6 +43,3 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`index.js listening on ${port}`)
 })
-// http.createServer(app).listen(port, () => {
-//   console.log(`index.js listening on ${port}`)
-// })
