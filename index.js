@@ -1,10 +1,11 @@
 const express = require('express')
-const cors = require('cors');
+// const cors = require('cors');
 const db = require('@cyclic.sh/dynamodb')
+var http = require('http');
 
 const app = express()
 
-app.use(cors({ origin: '*' }))
+// app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -41,6 +42,6 @@ app.use('/:scores', async (req, res) => {
 
 // Start the server
 const port = process.env.PORT || 3000
-app.listen(port, () => {
+http.createServer(app).listen(port, () => {
   console.log(`index.js listening on ${port}`)
 })
