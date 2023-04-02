@@ -27,10 +27,11 @@ app.use('/:scores', async (req, res) => {
   )
   let newScoreBoard
   if (validScoreEntriesFromUser.length) {
+    const scoreEntriesMaxCount = 10
     newScoreBoard = parsedScoreBoardFromDB
       .concat(validScoreEntriesFromUser)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 10)
+      .slice(0, scoreEntriesMaxCount)
     db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
   } else {
     newScoreBoard = parsedScoreBoardFromDB.length ? parsedScoreBoardFromDB : scoreBoardFromUser
