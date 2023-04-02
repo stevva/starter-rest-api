@@ -1,15 +1,12 @@
 const express = require('express')
 const cors = require('cors');
 const db = require('@cyclic.sh/dynamodb')
-const bodyParser = require("body-parser");
 
 const app = express()
 
 app.use(cors({ origin: '*' }))
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// app.use(express.json())
-// app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded())
+app.use(express.json())
 
 // Get scores from user and DB, join data and write joined to DB and send to user
 app.use('/:scores', async (req, res) => {
