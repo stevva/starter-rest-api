@@ -42,6 +42,9 @@ app.use('/:scores', async (req, res) => {
 
 // Start the server
 const port = process.env.PORT || 3000
-http.createServer(app).listen(port, () => {
+app.listen(port, () => {
   console.log(`index.js listening on ${port}`)
 })
+// http.createServer(app).listen(port, () => {
+//   console.log(`index.js listening on ${port}`)
+// })
