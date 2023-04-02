@@ -33,7 +33,7 @@ app.use('/:scores', async (req, res) => {
       .slice(0, 10)
     db.collection(scores).set('scoreBoard', { scoreBoardItems: newScoreBoard })
   } else {
-    newScoreBoard = scoreBoardFromUser
+    newScoreBoard = parsedScoreBoardFromDB
   }
   console.log('newScoreBoard:', newScoreBoard)
   res.json(JSON.stringify({ newScoreBoard }))
