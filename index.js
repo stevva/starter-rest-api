@@ -38,18 +38,6 @@ app.use('/:scores', async (req, res) => {
   res.json(JSON.stringify({ newScoreBoard }))
 })
 
-app.use('/:maintenance', async (req, res) => {
-  const scoreBoardFromDB = await db.collection('scores').get('scoreBoard')
-  const parsedScoreBoardFromDB = scoreBoardFromDB
-    ? JSON.parse(JSON.stringify(scoreBoardFromDB, null, 2)).props.scoreBoardItems
-    : []
-  const mapFromUser = req.body.mapFromUser
-  console.log('mapFromUser:', mapFromUser)
-  // const newScoreBoard = parsedScoreBoardFromDB.map(mapFromUser)
-  // db.collection('scores').set('scoreBoard', { scoreBoardItems: newScoreBoard })
-  // res.json(JSON.stringify({ newScoreBoard }))
-})
-
 // Start the server
 const port = process.env.PORT || 3000
 app.listen(port, () => {
