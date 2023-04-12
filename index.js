@@ -22,8 +22,7 @@ app.use('/:scores', async (req, res) => {
       && scoreEntryFromDB.name === scoreEntryFromUser.name && scoreEntryFromDB.score === scoreEntryFromUser.score
     )
     return isHighscore && isUnique
-  }
-  )
+  })
   let newScoreBoard
   if (validScoreEntriesFromUser.length) {
     const scoreEntriesMaxCount = 10
